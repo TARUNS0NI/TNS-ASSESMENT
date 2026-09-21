@@ -1,0 +1,282 @@
+/* ==================================================================
+   EMAIL SPAM DETECTION — STYLESHEET
+   Visual idea: an airmail envelope on a sorting desk. The verdict
+   arrives as a rubber stamp pressed onto the page.
+   ================================================================== */
+
+/* ------------------------------------------------------------------
+   DESIGN TOKENS
+   ------------------------------------------------------------------ */
+:root {
+  --paper:        #eef1f3;  /* cool pale envelope stock */
+  --paper-lined:  #f8fafb;  /* the letter inside, slightly brighter */
+  --ink:          #16202b;  /* primary text */
+  --ink-soft:     #61707d;  /* secondary text */
+  --rule:         #cfd8de;  /* hairlines and borders */
+  --airmail-red:  #b32b24;  /* spam verdict, envelope chevron */
+  --airmail-blue: #1f4e8c;  /* safe verdict, envelope chevron */
+
+  --shell: 640px;           /* maximum reading width */
+}
+
+/* ------------------------------------------------------------------
+   BASE
+   ------------------------------------------------------------------ */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 2.5rem 1.25rem 4rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------
+   THE ENVELOPE
+   The top and bottom edges carry the classic airmail chevron, drawn
+   with a repeating gradient rather than an image.
+   ------------------------------------------------------------------ */
+.envelope {
+  max-width: var(--shell);
+  margin: 0 auto;
+  background: var(--paper-lined);
+  border: 1px solid var(--rule);
+  padding: 2.5rem 2rem;
+  position: relative;
+}
+
+.envelope::before,
+.envelope::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--airmail-red)  0px, var(--airmail-red)  11px,
+    var(--paper-lined) 11px, var(--paper-lined) 22px,
+    var(--airmail-blue) 22px, var(--airmail-blue) 33px,
+    var(--paper-lined) 33px, var(--paper-lined) 44px
+  );
+}
+.envelope::before { top: 0; }
+.envelope::after  { bottom: 0; }
+
+/* ------------------------------------------------------------------
+   MASTHEAD
+   ------------------------------------------------------------------ */
+.masthead h1 {
+  font-family: "Archivo Black", "Archivo", Arial, sans-serif;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem;
+}
+
+.standfirst {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------------------
+   COMPOSE AREA
+   ------------------------------------------------------------------ */
+.compose {
+  margin-top: 2.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+.field-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* The message box reads as ruled letter paper: monospace text sitting
+   on evenly spaced horizontal lines drawn by a repeating gradient. */
+#emailText {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--rule);
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 27px,
+    var(--rule) 27px,
+    var(--rule) 28px
+  );
+  background-position: 0 0.55rem;
+  color: var(--ink);
+  font-family: "Courier Prime", "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 28px;
+  resize: vertical;
+}
+
+#emailText:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--airmail-blue);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------
+   SAMPLE CHIPS
+   ------------------------------------------------------------------ */
+.samples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.9rem 0 1.5rem;
+}
+
+.samples-lead {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-right: 0.15rem;
+}
+
+.chip {
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+
+.chip:hover { border-color: var(--airmail-blue); color: var(--airmail-blue); }
+
+/* ------------------------------------------------------------------
+   PRIMARY BUTTON
+   ------------------------------------------------------------------ */
+.primary {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary:hover        { background: var(--airmail-blue); }
+.primary:disabled     { background: var(--ink-soft); cursor: progress; }
+
+/* ------------------------------------------------------------------
+   RESULT — hidden until a verdict exists
+   ------------------------------------------------------------------ */
+.result {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+.result.visible { display: flex; }
+
+/* The rubber stamp. Everything else on the page is quiet so this can be loud. */
+.stamp {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 148px;
+  padding: 0.8rem 0.5rem;
+  border: 4px double currentColor;
+  transform: rotate(-7deg);
+  opacity: 0.88; /* slightly faded, the way real stamp ink sits on paper */
+}
+
+.stamp.spam { color: var(--airmail-red); }
+.stamp.safe { color: var(--airmail-blue); }
+
+.stamp-verdict {
+  font-family: "Archivo Black", "Archivo", Arial, sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.stamp-rule {
+  width: 60%;
+  height: 2px;
+  background: currentColor;
+}
+
+.stamp-mark {
+  font-family: "Courier Prime", "Courier New", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+}
+
+/* One orchestrated motion moment: the stamp presses down onto the page. */
+.result.visible .stamp {
+  animation: press 260ms cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+
+@keyframes press {
+  from { transform: rotate(-7deg) scale(1.5); opacity: 0; }
+  to   { transform: rotate(-7deg) scale(1);   opacity: 0.88; }
+}
+
+/* ------------------------------------------------------------------
+   READOUT
+   ------------------------------------------------------------------ */
+.readout-line {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.readout-meta {
+  margin: 0;
+  font-family: "Courier Prime", "Courier New", monospace;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------------------
+   STATUS LINE
+   ------------------------------------------------------------------ */
+.status {
+  margin: 1.1rem 0 0;
+  min-height: 1.4em;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.status.error { color: var(--airmail-red); }
+
+/* ------------------------------------------------------------------
+   SMALL SCREENS
+   ------------------------------------------------------------------ */
+@media (max-width: 520px) {
+  .envelope { padding: 2rem 1.25rem; }
+  .result   { flex-direction: column; align-items: flex-start; }
+  .stamp    { align-self: center; }
+}
+
+/* ------------------------------------------------------------------
+   REDUCED MOTION
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .result.visible .stamp { animation: none; }
+  * { transition: none !important; }
+}

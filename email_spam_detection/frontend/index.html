@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Spam Detection</title>
+
+  <!-- Google Fonts: Archivo for the interface, Courier Prime for the typewritten message area -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Archivo+Black&family=Courier+Prime:wght@400;700&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- The whole page is one envelope, edged with the red-and-blue airmail chevron -->
+  <main class="envelope">
+
+    <!-- ============ HEADER ============ -->
+    <header class="masthead">
+      <h1>Email spam detection</h1>
+      <p class="standfirst">
+        Paste a message and a trained classifier decides whether it is spam.
+        It learned the difference from forty labelled emails.
+      </p>
+    </header>
+
+    <!-- ============ INPUT ============ -->
+    <section class="compose">
+      <label for="emailText" class="field-label">Message text</label>
+
+      <!-- The textarea is styled as ruled letter paper -->
+      <textarea
+        id="emailText"
+        rows="8"
+        placeholder="Paste the email here…"
+        spellcheck="false"></textarea>
+
+      <!-- Quick-fill samples so the page is usable without hunting for an email -->
+      <div class="samples">
+        <span class="samples-lead">Or load an example</span>
+        <button type="button" class="chip" data-sample="spam">Prize offer</button>
+        <button type="button" class="chip" data-sample="ham">Meeting note</button>
+      </div>
+
+      <button type="button" id="checkBtn" class="primary">Check this message</button>
+    </section>
+
+    <!-- ============ RESULT ============ -->
+    <!-- aria-live announces the verdict to screen readers the moment it arrives -->
+    <section id="result" class="result" aria-live="polite">
+
+      <!-- The rubber stamp: the single loud element on the page -->
+      <div class="stamp" id="stamp">
+        <span class="stamp-verdict" id="stampVerdict"></span>
+        <span class="stamp-rule"></span>
+        <span class="stamp-mark">CLASSIFIED</span>
+      </div>
+
+      <div class="readout">
+        <p class="readout-line" id="readoutLine"></p>
+        <p class="readout-meta" id="readoutMeta"></p>
+      </div>
+
+    </section>
+
+    <!-- Status line for errors and loading, kept separate from the verdict -->
+    <p class="status" id="status" role="status"></p>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
