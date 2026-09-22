@@ -1,0 +1,19 @@
+# ------------------------------------------------------------------
+# DEPENDENCY MANIFEST: requirements.txt
+# Install everything with:  python -m pip install -r requirements.txt
+# ------------------------------------------------------------------
+
+# Data analysis library used to read music_listeners.csv into a DataFrame
+pandas
+
+# Fundamental scientific computing package (used internally by scikit-learn)
+numpy
+
+# Core machine learning library: StandardScaler + KMeans clustering
+scikit-learn
+
+# Serialization utility used to save (.pkl) and load the trained model and scaler
+joblib
+
+# Lightweight web framework used to serve the listener-segment form and prediction
+Flask
